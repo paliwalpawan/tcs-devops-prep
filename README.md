@@ -73,7 +73,7 @@ Installation of Java, Maven , Jenkins , Docker in <OTHERS> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
 	- Execute following command :
 		ansible-galaxy install geerlingguy.java gantsign.maven geerlingguy.jenkins geerlingguy.docker
-	- Then copy the contents of install-java-maven-jenkins-docker.yaml in <ANSIBLE> VM
+	- Then copy the contents of ansible-playbooks/install-java-maven-jenkins-docker.yaml in <ANSIBLE> VM
 	- Execute following command
 		ansible-playbook install-java-maven-jenkins-docker.yaml
 	- Ensure there are no error messages
@@ -87,7 +87,7 @@ Installation of Java, Maven , Jenkins , Docker in <OTHERS> using ansible
 
 Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
-	- Then copy the contents of install-java-jfrog-sonarqube.yaml in <ANSIBLE> VM
+	- Then copy the contents of ansible-playbooks/install-java-jfrog-sonarqube.yaml in <ANSIBLE> VM
 	- Execute following command
 		ansible-playbook install-java-jfrog-sonarqube.yaml
 	- Ensure there are no error messages
@@ -106,4 +106,4 @@ Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 
 <h5>2) Jenkins Pipeline</h5>
 
-![Jenkins Pipeline](https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project/raw/master/Jenkins-Pipeline.JPG)
+![Jenkins Pipeline](https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project/raw/master/images/Jenkins-Pipeline.JPG)
