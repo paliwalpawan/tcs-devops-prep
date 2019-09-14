@@ -1,9 +1,8 @@
 <h4>Following steps describe the end-to-end process for completing TCS DevOps Golden Bridge Hackathon (2019) challenge</h4>
-<h5>For simplicity we used only three GCP VM instances</h5>
+<h6>For simplicity we used only three GCP VM instances</h6>
 
+<h5>Software Provisioning Stage</h5>
 ```
-Steps :
--------
 VM instance creation 
 	- Created a CentOs 7 instance <ANSIBLE> (with disk size as 30 GB)(allowed Allow full access to all Cloud APIs , allowed HTTP & HTTPS traffics under Firewall)
 	- Created exactly similar instance for all other tools named <OTHERS> & <OTHERS2>
@@ -103,3 +102,5 @@ Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 	- Now, access Sonarqube from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:9000" (default credentials admin / admin)
 	- And, access jFrog from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:8081" (default credentials admin / password)
 ```
+
+<h5>Jenkins Pipeline</h5>
