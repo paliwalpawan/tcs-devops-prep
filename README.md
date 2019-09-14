@@ -105,3 +105,5 @@ Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 ```
 
 <h5>Jenkins Pipeline</h5>
+
+![Jenkins Pipeline](https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project/raw/master/Jenkins-Pipeline.JPG)
