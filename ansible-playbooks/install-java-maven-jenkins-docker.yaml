@@ -7,21 +7,35 @@
       - java-1.8.0-openjdk-devel
   - role: gantsign.maven
     become: yes  
-  - role: geerlingguy.jenkins
-    become: yes
-    vars:
-      jenkins_http_port: 9000
-      jenkins_admin_username: admin
-      jenkins_admin_password: admin
+    
+- hosts: others
+  tasks:
+    - name : "enable jenkins repository"
+      become: yes
+      command: "curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo"
+    - name : "add jenkins repository"
+      become: yes
+      command: "rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key"
+    - name : "install jenkins"
+      become: yes
+      command: "yum install jenkins"
+    - name : "enable jenkins service"
+      become: yes
+      command: "systemctl enable jenkins"      
+    - name : "start jenkins service"
+      become: yes
+      command: "systemctl start jenkins"  
+      
+- hosts: others
   - role: geerlingguy.docker
     become: yes
     vars:
       docker_edition: 'ce'
       docker_users:
         - jenkins
-    notify:
-      - restart jenkins
-  handlers:
+
+- hosts: others
+  tasks:
     - name: restart jenkins
       become: yes
       service:
