@@ -1,5 +1,5 @@
-###Following steps describe the end-to-end process for completing hackathon challenge###
-####For simplicity we have assumed that we have three GCP VM instances####
+<h4>Following steps describe the end-to-end process for completing hackathon challenge</h4>
+<h5>For simplicity we have assumed that we have three GCP VM instances</h5>
 
 ```
 Steps :
