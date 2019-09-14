@@ -2,6 +2,7 @@
 <h6>For simplicity we used only three GCP VM instances</h6>
 
 <h5>Software Provisioning Stage</h5>
+
 ```
 VM instance creation 
 	- Created a CentOs 7 instance <ANSIBLE> (with disk size as 30 GB)(allowed Allow full access to all Cloud APIs , allowed HTTP & HTTPS traffics under Firewall)
