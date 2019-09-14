@@ -1,5 +1,5 @@
-<h4>Following steps describe the end-to-end process for completing hackathon challenge</h4>
-<h5>For simplicity we have assumed that we have three GCP VM instances</h5>
+<h4>Following steps describe the end-to-end process for completing TCS DevOps Golden Bridge Hackathon (2019) challenge</h4>
+<h5>For simplicity we used only three GCP VM instances</h5>
 
 ```
 Steps :
