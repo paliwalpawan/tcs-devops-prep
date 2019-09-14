@@ -1,0 +1,29 @@
+---
+- hosts: others
+  roles:
+  - role : geerlingguy.java
+    become: yes
+    java_packages:
+      - java-1.8.0-openjdk-devel
+  - role: gantsign.maven
+    become: yes  
+  - role: geerlingguy.jenkins
+    become: yes
+    vars:
+      jenkins_http_port: 9000
+      jenkins_admin_username: admin
+      jenkins_admin_password: admin
+  - role: geerlingguy.docker
+    become: yes
+    vars:
+      docker_edition: 'ce'
+      docker_users:
+        - jenkins
+    notify:
+      - restart jenkins
+  handlers:
+    - name: restart jenkins
+      become: yes
+      service:
+        name: jenkins
+        state: restarted

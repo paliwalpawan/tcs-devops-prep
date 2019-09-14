@@ -1,0 +1,47 @@
+---
+- hosts: others2
+  roles:
+  - role : geerlingguy.java
+    become: yes
+    java_packages:
+      - java-11-openjdk-devel
+
+- hosts: others2
+  tasks:
+    - name: "install unzip"
+      become: yes
+      yum: name=unzip state=latest
+ 
+    - name: "add sonarqube user"
+      become: yes
+      user:
+        name: sonarqube
+        shell: /bin/bash
+        home: /home/sonarqube
+        password: sonarqube
+
+    - name: "download & unarchive sonar zip"
+      become: yes
+      unarchive:
+        src: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.1.zip
+        dest: /opt/
+        remote_src: yes
+        owner: sonarqube
+
+- hosts: others2
+  tasks:
+    - name: "download jFrog RPM spec"
+      get_url:
+        url: https://bintray.com/jfrog/artifactory-rpms/rpm
+        dest: /tmp
+      become: yes
+    - name: "move jFrog RPM spec under yum repos"
+      command: mv /tmp/bintray--jfrog-artifactory-rpms.repo /etc/yum.repos.d/
+      become: yes
+    - name: "install jFrog"
+      yum: name=jfrog-artifactory-cpp-ce state=latest
+      become: yes
+    - name: "start artifactory service"
+      service:
+        name: artifactory
+        state: started
