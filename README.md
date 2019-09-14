@@ -1,7 +1,7 @@
 <h4>Following steps describe the end-to-end process for completing TCS DevOps Golden Bridge Hackathon (2019) challenge</h4>
-<h6>For simplicity we used only three GCP VM instances</h6>
+<h6>Note : For simplicity we used only three GCP VM instances</h6>
 
-<h5>Software Provisioning Stage</h5>
+<h5>1) Software Provisioning Stage</h5>
 
 ```
 VM instance creation 
@@ -104,6 +104,6 @@ Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 	- And, access jFrog from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:8081" (default credentials admin / password)
 ```
 
-<h5>Jenkins Pipeline</h5>
+<h5>2) Jenkins Pipeline</h5>
 
 ![Jenkins Pipeline](https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project/raw/master/Jenkins-Pipeline.JPG)
