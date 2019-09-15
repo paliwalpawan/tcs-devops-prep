@@ -20,13 +20,15 @@
       command: "rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key"
     - name : "install jenkins"
       become: yes
-      command: "yum install jenkins"
-    - name : "enable jenkins service"
+      yum:
+        name: jenkins
+        state: latest
+    - name : "enable and start jenkins service"
       become: yes
-      command: "systemctl enable jenkins"      
-    - name : "start jenkins service"
-      become: yes
-      command: "systemctl start jenkins"  
+      service:
+        name: httpd
+        enabled: yes
+        state: started
       
 - hosts: others
   roles:
