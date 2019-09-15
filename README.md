@@ -74,10 +74,9 @@ Installation of ansible in <ANSIBLE> instance
 
 Installation of Java, Maven , Git, Jenkins , Docker in <OTHERS> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
-	- Execute following command :
-		ansible-galaxy install geerlingguy.java gantsign.maven geerlingguy.jenkins geerlingguy.docker
-	- Then copy the contents of ansible-playbooks/install-java-maven-git-jenkins-docker.yaml in <ANSIBLE> VM
-	- Execute following command
+	- Execute following commands in <ANSIBLE> VM:
+		git clone <repository url>
+		cd  <repository directory>
 		ansible-playbook install-java-maven-git-jenkins-docker.yaml
 	- Ensure there are no error messages
 	- Login to <OTHERS> VM
@@ -91,8 +90,9 @@ Installation of Java, Maven , Git, Jenkins , Docker in <OTHERS> using ansible
 
 Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
-	- Then copy the contents of ansible-playbooks/install-java-jfrog-sonarqube.yaml in <ANSIBLE> VM
-	- Execute following command
+	- Execute following commands in <ANSIBLE> VM:
+		git clone <repository url>
+		cd  <repository directory>
 		ansible-playbook install-java-jfrog-sonarqube.yaml
 	- Ensure there are no error messages
 	- Login to <OTHERS2> VM
