@@ -1,3 +1,6 @@
+---
+- hosts: localhost    
+  tasks:
     - name: "install ansible galaxy roles"
       command: ansible-galaxy install {{item}}
       with_items:

@@ -1,7 +1,5 @@
 ---
-- hosts: localhost
-  tasks:
-    - include install-galaxy-roles.yaml
+- import_playbook: install-galaxy-roles.yaml
 
 - hosts: others2
   roles:
