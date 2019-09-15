@@ -46,7 +46,8 @@ Sofwares that need installation (as per my understanding) :
  ------ <use OTHERS VM for all these>----------------------------------
 |	JDK 8 (for jenkins & maven)		ansible-galaxy install geerlingguy.java (https://galaxy.ansible.com/geerlingguy/java)
 |	maven (for jenkins)			ansible-galaxy install gantsign.maven (https://galaxy.ansible.com/gantsign/maven)
-|	jenkins						ansible-galaxy install geerlingguy.jenkins (https://galaxy.ansible.com/geerlingguy/jenkins)
+|   git (for jenkins)
+|	jenkins						
 |	docker						ansible-galaxy install geerlingguy.docker (https://galaxy.ansible.com/geerlingguy/docker)
  ----------------------------------------------------------------------
  ------<use OTHERS2 VM for all these>----------------------------------
@@ -71,21 +72,22 @@ Installation of ansible in <ANSIBLE> instance
     - Also, install gitlab client 
 		yum install git
 
-Installation of Java, Maven , Jenkins , Docker in <OTHERS> using ansible
+Installation of Java, Maven , Git, Jenkins , Docker in <OTHERS> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
 	- Execute following command :
 		ansible-galaxy install geerlingguy.java gantsign.maven geerlingguy.jenkins geerlingguy.docker
-	- Then copy the contents of ansible-playbooks/install-java-maven-jenkins-docker.yaml in <ANSIBLE> VM
+	- Then copy the contents of ansible-playbooks/install-java-maven-git-jenkins-docker.yaml in <ANSIBLE> VM
 	- Execute following command
-		ansible-playbook install-java-maven-jenkins-docker.yaml
+		ansible-playbook install-java-maven-git-jenkins-docker.yaml
 	- Ensure there are no error messages
 	- Login to <OTHERS> VM
 	- Check whether installations are successful
 		Java : java -version , javac -version
 		Maven : mvn --version
 		Docker: docker --version
+		Git: git --version
 		Jenkins: service jenkins status 
-	- Now, access Jenkins from browser : "http://<EXTERNAL IP OF OTHERS VM>:9000"
+	- Now, access Jenkins from browser : "http://<EXTERNAL IP OF OTHERS VM>:8080"
 
 Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
@@ -109,3 +111,14 @@ Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 <h5>2) Jenkins Pipeline</h5>
 
 ![Jenkins Pipeline](https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project/raw/master/images/Jenkins-Pipeline.JPG)
+
+<h5>3) Jenkins setup</h5>
+
+```
+Open Jenkins with "http://<EXTERNAL IP OF OTHERS VM>:8080"
+Provide initialAdminPassword
+Install suggested plugins
+Create admin user (admin / admin)
+After jenkins start, got to Manage Jenkins --> Global Tool Configuration
+	
+```

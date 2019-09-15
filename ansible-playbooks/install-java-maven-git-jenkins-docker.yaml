@@ -7,6 +7,13 @@
       - java-1.8.0-openjdk-devel
   - role: gantsign.maven
     become: yes  
+ 
+- hosts: others
+  tasks:
+    - name: "install git cli"
+      yum:
+        name: git
+        state: latest         
     
 - hosts: others
   tasks:
