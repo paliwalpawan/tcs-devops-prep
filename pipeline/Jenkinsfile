@@ -1,0 +1,40 @@
+node('master') {
+	def mvnHome
+	
+	stage('Checkout') { 
+		// Checkout source code repository
+		git 'https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project.git'
+		mvnHome = tool 'Local-Maven'
+	}
+	
+	stage('Build') {
+		// Run the maven build
+		withEnv(["MVN_HOME=$mvnHome"]) {
+			if (isUnix()) {
+				sh 'cd ${WORKSPACE}/SimpleServlet/ && "$MVN_HOME/bin/mvn" -Dmaven.test.failure.ignore clean package'
+			}
+		}
+	}
+	
+	stage('Static Analysis') {
+		// Run maven command to perform static analysis & publish report in sonar server
+	}
+	
+	stage('Upload Artifact') {
+		// Upload war file to jFrog artifactory
+	}
+	
+	stage('Build Image') {
+		// Download war file from artifactory
+		// Create Docker Image
+	}
+	
+	stage('Upload Image') {
+		// Upload docker image to jFrog artifactory
+	}
+	
+	stage('Deploy') {
+		// Deploy docker image to kubernetes cluster
+	}
+	
+}

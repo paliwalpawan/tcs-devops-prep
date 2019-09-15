@@ -120,5 +120,24 @@ Provide initialAdminPassword
 Install suggested plugins
 Create admin user (admin / admin)
 After jenkins start, got to Manage Jenkins --> Global Tool Configuration
-	
+	- Add configurations for JDK, Maven , Git & Docker
+Go to Manage Jenkins --> Manage Plugins --> Available tab --> Install following (Install without restart)
+	- Blue Ocean
+Go to Manage Jenkins --> Manage Nodes --> New Node
+	- Prerequisite : The slave node(s) must have password login enabled (IMPORTANT !!!)
+		> Login to all the target slave nodes
+		> su - root
+		> vim /etc/ssh/sshd_config
+		> Change "PasswordAuthentication" to yes (PasswordAuthentication yes)
+		> service sshd restart
+	- Node Name : slave-others2
+	- Click on "Permanent Agent"
+	- Ok
+	- Remote root directory : /var/
+	- Labels: slave
+	- Host: <External IP of OTHERS2 VM>
+	- Credentials --> Add --> Add root credentials for OTHERS2 VM
+	- Host Key Verification Strategy : Non verifying....
+	- Save
+..........
 ```
