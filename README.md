@@ -14,15 +14,15 @@ Creation of ssh keys in <ANSIBLE> instance
 	- sudo passwd root (change root password to "root")
 	- su - root
 	- ssh-keygen (hit enter when prompted)
-	- copy id_rsa.pub content --> go to VM instances --> click on <OTHERS> VM instance  --> Edit --> Go to SSH Keys section --> paste the content of id_rsa.pub there --> save --> repeat the same process for <OTHERS2> instance as well
+	- copy id_rsa.pub content --> go to VM instances --> click on <OTHERS> VM instance  --> Edit --> Go to SSH Keys section --> paste the content of id_rsa.pub there --> save --> repeat the same process for <OTHERS2> instance as well --> repeat the same process for <ANSIBLE> (so that the server can ssh into itself)
 
-Allowing root login in <OTHERS> & <OTHERS2> instance from <ANSIBLE> instance
+Allowing root login in <ANSIBLE>, <OTHERS> & <OTHERS2> instance from <ANSIBLE> instance
 	- On <OTHERS> instance , clicked on Connect --> view gcloud command --> Copy the gcloud command --> RUN IN CLOUD SHELL --> Paste the copied gcloud command --> Hit enter 
 	- sudo passwd root (change root password to "root")
 	- su - root
 	- vim /etc/ssh/sshd_config --> change PermitRootLogin to 'yes'
 	- service sshd restart
-	- repeat the same steps for <OTHERS2> instance as well
+	- repeat the same steps for <ANSIBLE> & <OTHERS2> instance as well
 
 Verification of passwordless ssh from <ANSIBLE> -> <OTHERS>
 	- Now, in <ANSIBLE> instance command prompt, try "ssh root@<public or private IP of OTHERS>" and verify that passwordless ssh is indeed happening

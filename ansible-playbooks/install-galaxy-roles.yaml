@@ -1,0 +1,6 @@
+- name: "install ansible galaxy roles"
+  command: ansible-galaxy install {{item}}
+  with_items:
+    - geerlingguy.java
+    - gantsign.maven
+    - geerlingguy.docker

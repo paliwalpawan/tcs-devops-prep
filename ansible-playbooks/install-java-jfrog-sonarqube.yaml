@@ -1,4 +1,8 @@
 ---
+- hosts: localhost
+  tasks:
+    - include install-galaxy-roles.yaml
+
 - hosts: others2
   roles:
   - role : geerlingguy.java
