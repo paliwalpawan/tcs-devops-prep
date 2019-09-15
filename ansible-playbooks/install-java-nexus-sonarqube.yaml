@@ -1,0 +1,38 @@
+---
+- import_playbook: install-galaxy-roles.yaml
+
+- hosts: others2
+  roles:
+  - role : geerlingguy.java
+    become: yes
+    java_packages:
+      - java-11-openjdk-devel
+
+- hosts: others2
+  tasks:
+    - name: "install unzip"
+      become: yes
+      yum: name=unzip state=latest
+ 
+    - name: "add sonarqube user"
+      become: yes
+      user:
+        name: sonarqube
+        shell: /bin/bash
+        home: /home/sonarqube
+        password: sonarqube
+
+    - name: "download & unarchive sonar zip"
+      become: yes
+      unarchive:
+        src: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.1.zip
+        dest: /opt/
+        remote_src: yes
+        owner: sonarqube
+
+- hosts: others2
+  roles:
+  - role: sansible.nexus
+    become: yes
+    vars:
+      sansible_nexus_configuration_admin_password: admin
