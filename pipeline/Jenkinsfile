@@ -82,7 +82,7 @@ node('master') {
 				// Create Docker Image
 				if(isUnix()) {
 					sh(script: "mv ${WORKSPACE}/docker/${JOB_NAME}-${BUILD_NUMBER}/SimpleServlet-*.war ${WORKSPACE}/docker/")
-					docker.build("simpleServlet", "${WORKSPACE}/docker/")
+					docker.build("simpleservlet", "${WORKSPACE}/docker/")
 				}
 
 			} catch(Exception ex) {
