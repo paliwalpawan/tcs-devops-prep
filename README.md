@@ -112,32 +112,52 @@ Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 
 ![Jenkins Pipeline](https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project/raw/master/images/Jenkins-Pipeline.JPG)
 
-<h5>3) Jenkins setup</h5>
+<h5>3) Preparation work </h5>
 
 ```
-Open Jenkins with "http://<EXTERNAL IP OF OTHERS VM>:8080"
-Provide initialAdminPassword
-Install suggested plugins
-Create admin user (admin / admin)
-After jenkins start, got to Manage Jenkins --> Global Tool Configuration
-	- Add configurations for JDK, Maven , Git & Docker
-Go to Manage Jenkins --> Manage Plugins --> Available tab --> Install following (Install without restart)
-	- Blue Ocean
-Go to Manage Jenkins --> Manage Nodes --> New Node
-	- Prerequisite : The slave node(s) must have password login enabled (IMPORTANT !!!)
-		> Login to all the target slave nodes
-		> su - root
-		> vim /etc/ssh/sshd_config
-		> Change "PasswordAuthentication" to yes (PasswordAuthentication yes)
-		> service sshd restart
-	- Node Name : slave-others2
-	- Click on "Permanent Agent"
-	- Ok
-	- Remote root directory : /var/
-	- Labels: slave
-	- Host: <External IP of OTHERS2 VM>
-	- Credentials --> Add --> Add root credentials for OTHERS2 VM
-	- Host Key Verification Strategy : Non verifying....
-	- Save
+		
+SONARQUBE:
+	Open sonarqube in browser with "http://<EXTERNAL IP OF OTHERS2 VM>:9000"
+	Create new project --> enter some "Project key" --> Set up --> Enter some text in "Generate Token" --> Take a note of the token (IMPORTANT !!) --> Continue --> Select Project's main language as "Java" --> Select build technology as "maven" --> take a note of the scanner command (IMPORTANT !)
+	
+jFROG:
+	Open artifactory in browser with "http://<EXTERNAL IP OF OTHERS2 VM>:8081"
+	At the top right corner, Click on the "Welcome, admin" dropdown --> Select Create Repositories --> Local Repository --> Select package type as "Generic" --> Provide some "Repository Key" --> Save & Finish
+	
+JENKINS : 
+	Open Jenkins with "http://<EXTERNAL IP OF OTHERS VM>:8080"
+	Provide initialAdminPassword
+	Install suggested plugins
+	Create admin user (admin / admin)
+	After jenkins start, got to Manage Jenkins --> Global Tool Configuration
+		- Add configurations for JDK, Maven , Git & Docker
+	Go to Manage Jenkins --> Manage Plugins --> Available tab --> Install following (Install without restart)
+		- Blue Ocean (for nice visualization of pipeline stages)
+		- Artifactory (for uploading / downloading files to/from jFrog artifactory)
+	Go to Manage Jenkins --> Manage Nodes --> New Node
+		- Prerequisite : The slave node(s) must have password login enabled (IMPORTANT !!!)
+			> Login to all the target slave nodes
+			> su - root
+			> vim /etc/ssh/sshd_config
+			> Change "PasswordAuthentication" to yes (PasswordAuthentication yes)
+			> service sshd restart
+		- Node Name : slave-others2
+		- Click on "Permanent Agent"
+		- Ok
+		- Remote root directory : /var/
+		- Labels: slave
+		- Host: <External IP of OTHERS2 VM>
+		- Credentials --> Add --> Add root credentials for OTHERS2 VM
+		- Host Key Verification Strategy : Non verifying....
+		- Save
+	Go to Manage Jenkins --> Configure system --> Go to "Artifactory" section --> Add artifactory server --> Provide following details :
+		Server Id
+		URL (url should be like http://34.70.150.87:8081/artifactory/)
+		Default deployer username 
+		Default deployer password
+	--> Save
+
+	
+	
 ..........
 ```

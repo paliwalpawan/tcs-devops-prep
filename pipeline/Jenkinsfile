@@ -2,33 +2,96 @@ node('master') {
 	def mvnHome
 	
 	stage('Checkout') { 
-		// Checkout source code repository
-		git 'https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project.git'
-		mvnHome = tool 'Local-Maven'
+		timestamps {
+			// Checkout source code repository
+			git 'https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project.git'
+			mvnHome = tool 'Local-Maven'
+		}
 	}
 	
 	stage('Build') {
-		// Run the maven build
-		withEnv(["MVN_HOME=$mvnHome"]) {
-			if (isUnix()) {
-				sh 'cd ${WORKSPACE}/SimpleServlet/ && "$MVN_HOME/bin/mvn" -Dmaven.test.failure.ignore clean package'
+		timestamps {
+			// Run the maven build
+			withEnv(["MVN_HOME=$mvnHome"]) {
+				if (isUnix()) {
+					jobStatus = sh(returnStatus: true, script: 'cd ${WORKSPACE}/SimpleServlet/ && "$MVN_HOME/bin/mvn" -Dmaven.test.failure.ignore clean package')
+					
+					if(jobStatus != 0) {
+						sh "exit 1"
+					} 
+				}
 			}
 		}
 	}
 	
 	stage('Static Analysis') {
-		// Run maven command to perform static analysis & publish report in sonar server
+		timestamps {
+			// Run maven command to perform static analysis & publish report in sonar server
+			withEnv(["MVN_HOME=$mvnHome"]) {
+				if (isUnix()) {
+					jobStatus = sh(returnStatus: true, script: 'cd ${WORKSPACE}/SimpleServlet/ && "$MVN_HOME/bin/mvn" sonar:sonar -Dsonar.projectKey=tcs-devops-hackathon-prep-project -Dsonar.host.url=http://34.70.150.87:9000 -Dsonar.login=ec4b9a052afbc6884c94e9e754ad3dc7a27dfe2f')
+					
+					if(jobStatus != 0) {
+						sh "exit 1"
+					} 
+				}
+			}
+		}
 	}
 	
 	stage('Upload Artifact') {
-		// Upload war file to jFrog artifactory
+		timestamps{
+			// Upload war file to jFrog artifactory
+			try {
+				rtUpload (
+					serverId: "Artifactory-Server",
+					spec:
+						"""{
+						"files": [
+							{
+								"pattern": "${WORKSPACE}/SimpleServlet/target/*.war",
+								"target": "tcs-devops-hackathon-prep-project/${JOB_NAME}-${BUILD_NUMBER}/"
+							}
+						]
+						}"""
+				)
+
+			} catch(Exception ex) {
+				sh "exit 1"
+			}
+		}
 	}
 	
 	stage('Build Image') {
-		// Download war file from artifactory
-		// Create Docker Image
+		timestamps {
+			try {
+				// Download war file from artifactory
+				rtDownload (
+					serverId: "Artifactory-Server",
+					spec:
+						"""{
+						"files": [
+							{
+							"pattern": "tcs-devops-hackathon-prep-project/${JOB_NAME}-${BUILD_NUMBER}/",
+							"target": "${WORKSPACE}/docker/"
+							}
+						]
+						}"""
+				)       
+
+				// Create Docker Image
+				if(isUnix()) {
+					sh(script: "mv ${WORKSPACE}/docker/${JOB_NAME}-${BUILD_NUMBER}/SimpleServlet-*.war ${WORKSPACE}/docker/")
+					docker.build("simpleServlet", "${WORKSPACE}/docker/")
+				}
+
+			} catch(Exception ex) {
+				sh "exit 1"
+			}
+		}
 	}
 	
+	/*
 	stage('Upload Image') {
 		// Upload docker image to jFrog artifactory
 	}
@@ -36,5 +99,5 @@ node('master') {
 	stage('Deploy') {
 		// Deploy docker image to kubernetes cluster
 	}
-	
+	*/
 }
