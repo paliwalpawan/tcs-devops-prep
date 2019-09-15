@@ -68,6 +68,8 @@ Installation of ansible in <ANSIBLE> instance
 			<private IP of OTHERS2 VM>
 	- Test ansible installation
 		ansible others -m ping
+    - Also, install gitlab client 
+		yum install git
 
 Installation of Java, Maven , Jenkins , Docker in <OTHERS> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)

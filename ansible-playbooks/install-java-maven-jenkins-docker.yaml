@@ -27,6 +27,7 @@
       command: "systemctl start jenkins"  
       
 - hosts: others
+  roles:
   - role: geerlingguy.docker
     become: yes
     vars:
