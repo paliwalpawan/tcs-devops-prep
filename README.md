@@ -7,6 +7,9 @@
 VM instance creation 
 	- Created a CentOs 7 instance <ANSIBLE> (with disk size as 30 GB)(allowed Allow full access to all Cloud APIs , allowed HTTP & HTTPS traffics under Firewall)
 	- Created exactly similar instance for all other tools named <OTHERS> & <OTHERS2>
+	
+Kubernetes cluster creation 
+	- Created a kubernetes cluster with 1 nodes & 1 CPU
 
 
 Creation of ssh keys in <ANSIBLE> instance 

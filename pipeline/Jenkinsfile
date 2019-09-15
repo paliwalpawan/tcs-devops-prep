@@ -82,7 +82,7 @@ node('master') {
 				// Create Docker Image
 				if(isUnix()) {
 					sh(script: "mv ${WORKSPACE}/docker/${JOB_NAME}-${BUILD_NUMBER}/SimpleServlet-*.war ${WORKSPACE}/docker/")
-					docker.build("simpleservlet", "${WORKSPACE}/docker/")
+					docker.build("simpleservlet:${BUILD_NUMBER}", "${WORKSPACE}/docker/")
 				}
 
 			} catch(Exception ex) {
@@ -92,12 +92,30 @@ node('master') {
 	}
 	
 	/*
+	// Currently not working (for uploading image into jFrog artifactory)
+	// Useful examples : 
+	// - https://www.jfrog.com/confluence/display/RTF/Scripted+Pipeline+Syntax
+	// - https://github.com/jfrogtraining/kubernetes_example/tree/master/docker-app
+	// - https://www.jfrog.com/confluence/plugins/servlet/mobile?contentId=57477640#content/view/57477640
+	
 	stage('Upload Image') {
-		// Upload docker image to jFrog artifactory
+		timestamps {
+			try {
+				// Upload docker image to jFrog artifactory
+				def server = Artifactory.server 'Artifactory-Server'
+				def rtDocker = Artifactory.docker server: server
+				def buildInfo = rtDocker.push('http://34.70.150.87:8081/simpleservlet:${BUILD_NUMBER}', 'tcs-devops-hackathon-prep-project/${JOB_NAME}-${BUILD_NUMBER}')
+				server.publishBuildInfo buildInfo
+			} catch(Exception ex) {
+				sh "exit 1"
+			}
+		}
 	}
+	*/
+	
 	
 	stage('Deploy') {
 		// Deploy docker image to kubernetes cluster
 	}
-	*/
+	
 }

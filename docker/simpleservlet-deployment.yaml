@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpleservlet-deployment
+  labels:
+    app: simpleservlet
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simpleservlet
+  template:
+    metadata:
+      labels:
+        app: simpleservlet
+    spec:
+      containers:
+      - name: to-do-list
+        image: simpleservlet:BUILD_NUMBER
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simpleservlet
+spec:
+  selector:
+    app: simpleservlet
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8888
