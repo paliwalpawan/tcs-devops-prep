@@ -56,7 +56,8 @@ Sofwares that need installation (as per my understanding) :
  ------<use OTHERS2 VM for all these>----------------------------------
 |	java 11 (for sonarqube & jFrog) ansible-galaxy install geerlingguy.java (https://galaxy.ansible.com/geerlingguy/java)
 |	sonarqube					
-|	jFrog artifactory			
+|	jFrog artifactory X
+|	sonatype nexus					ansible-galaxy install bbaassssiiee.nexus (https://galaxy.ansible.com/bbaassssiiee/nexus)			
  ----------------------------------------------------------------------
 
 Installation of ansible in <ANSIBLE> instance
@@ -91,7 +92,7 @@ Installation of Java, Maven , Git, Jenkins , Docker in <OTHERS> using ansible
 		Jenkins: service jenkins status 
 	- Now, access Jenkins from browser : "http://<EXTERNAL IP OF OTHERS VM>:8080"
 
-Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
+Installation of Java, Sonarqube, Nexus artifactory in <OTHERS2> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
 	- Execute following commands in <ANSIBLE> VM:
 		git clone <repository url>
@@ -102,13 +103,13 @@ Installation of Java, Sonarqube, jFrog artifactory in <OTHERS2> using ansible
 	- Check whether installations are successful
 		Java : java -version , javac -version
 		Sonar: ls /opt/sonar*
-		jFrog: sudo service artifactory status
+		nexus: sudo service nexus status 
 	- I was unable to start Sonarqube as service, so it had to be mannually started with following steps :
 		su - sonarqube (password : sonarqube)
 		cd /opt/sonar*/bin/linux*/
 		./sonar.sh start
 	- Now, access Sonarqube from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:9000" (default credentials admin / admin)
-	- And, access jFrog from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:8081" (default credentials admin / password)
+	- And, access nexus from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:8081" (default credentials admin / admin123)
 ```
 
 <h5>2) Jenkins Pipeline</h5>
