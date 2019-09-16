@@ -32,7 +32,5 @@
 
 - hosts: others2
   roles:
-  - role: sansible.nexus
+  - role: bbaassssiiee.nexus
     become: yes
-    vars:
-      sansible_nexus_configuration_admin_password: admin
