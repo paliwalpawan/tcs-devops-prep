@@ -109,7 +109,7 @@ Installation of Java, Sonarqube, Nexus artifactory in <OTHERS2> using ansible
 		cd /opt/sonar*/bin/linux*/
 		./sonar.sh start
 	- Now, access Sonarqube from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:9000" (default credentials admin / admin)
-	- And, access nexus from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:8081" (default credentials admin / admin123)
+	- And, access nexus from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:8081" (Look out for initial password in the login screen & then set new admin password credentials admin / admin)
 ```
 
 <h5>2) Jenkins Pipeline</h5>

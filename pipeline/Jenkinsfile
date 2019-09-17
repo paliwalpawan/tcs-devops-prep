@@ -41,8 +41,12 @@ node('master') {
 	
 	stage('Upload Artifact') {
 		timestamps{
-			// Upload war file to jFrog artifactory
+			// Upload war file to Nexus artifactory
 			try {
+				nexusPublisher nexusInstanceId: 'Nexus-Server', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '${WORKSPACE}/SimpleServlet/target/*.war']], mavenCoordinate: [artifactId: 'SimpleServlet', groupId: 'net.javatutorial.tutorials', packaging: 'war', version: '${JOB_NAME}-${BUILD_NUMBER}']]]
+				
+				/*
+				// For uploading to jFrog artifactory
 				rtUpload (
 					serverId: "Artifactory-Server",
 					spec:
@@ -54,7 +58,7 @@ node('master') {
 							}
 						]
 						}"""
-				)
+				)*/
 
 			} catch(Exception ex) {
 				sh "exit 1"
@@ -62,6 +66,7 @@ node('master') {
 		}
 	}
 	
+	/*
 	stage('Build Image') {
 		timestamps {
 			try {
@@ -91,7 +96,6 @@ node('master') {
 		}
 	}
 	
-	/*
 	// Currently not working (for uploading image into jFrog artifactory)
 	// Useful examples : 
 	// - https://www.jfrog.com/confluence/display/RTF/Scripted+Pipeline+Syntax
