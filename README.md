@@ -54,9 +54,8 @@ Sofwares that need installation (as per my understanding) :
 |	docker						ansible-galaxy install geerlingguy.docker (https://galaxy.ansible.com/geerlingguy/docker)
  ----------------------------------------------------------------------
  ------<use OTHERS2 VM for all these>----------------------------------
-|	java 11 (for sonarqube & jFrog) ansible-galaxy install geerlingguy.java (https://galaxy.ansible.com/geerlingguy/java)
+|	java 8 (for nexus) java 11+ (for sonarqube) ansible-galaxy install geerlingguy.java (https://galaxy.ansible.com/geerlingguy/java)
 |	sonarqube					
-|	jFrog artifactory X
 |	sonatype nexus					ansible-galaxy install bbaassssiiee.nexus (https://galaxy.ansible.com/bbaassssiiee/nexus)			
  ----------------------------------------------------------------------
 
@@ -80,7 +79,7 @@ Installation of Java, Maven , Git, Jenkins , Docker in <OTHERS> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
 	- Execute following commands in <ANSIBLE> VM:
 		git clone <repository url>
-		cd  <repository directory>
+		cd  <repository directory>/ansible-playbooks
 		ansible-playbook install-java-maven-git-jenkins-docker.yaml
 	- Ensure there are no error messages
 	- Login to <OTHERS> VM
@@ -96,7 +95,8 @@ Installation of Java, Sonarqube, Nexus artifactory in <OTHERS2> using ansible
 	- In <ANSIBLE> instance, switch to root (su - root)
 	- Execute following commands in <ANSIBLE> VM:
 		git clone <repository url>
-		cd  <repository directory>
+		cd  <repository directory>/ansible-playbooks
+		Verify the VM where nexus will be installed is specified in deamon.json - IMPORTANT !!!
 		ansible-playbook install-java-jfrog-sonarqube.yaml
 	- Ensure there are no error messages
 	- Login to <OTHERS2> VM
@@ -124,9 +124,11 @@ SONARQUBE:
 	Open sonarqube in browser with "http://<EXTERNAL IP OF OTHERS2 VM>:9000"
 	Create new project --> enter some "Project key" --> Set up --> Enter some text in "Generate Token" --> Take a note of the token (IMPORTANT !!) --> Continue --> Select Project's main language as "Java" --> Select build technology as "maven" --> take a note of the scanner command (IMPORTANT !)
 	
-jFROG:
-	Open artifactory in browser with "http://<EXTERNAL IP OF OTHERS2 VM>:8081"
-	At the top right corner, Click on the "Welcome, admin" dropdown --> Select Create Repositories --> Local Repository --> Select package type as "Generic" --> Provide some "Repository Key" --> Save & Finish
+NEXUS:
+	Open nexus in browser with "http://<EXTERNAL IP OF OTHERS2 VM>:8081"
+	Click on Settings (cog-wheel icon in the top menu bar) --> Reositories --> either create a "hosted" maven rpository OR use an existing one (ex. maven-releases)
+	Click on Settings (cog-wheel icon in the top menu bar) --> Reositories --> Create repository --> docker (hosted) --> provide a name --> ensure the "Online" checkbox is checked --> Under "Repository Connectors" , check "HTTP" -> provide port# 8083 (DO NOT CHANGE IT SINCE THE SMAE PORT IS SPECIFIED IN ansible-playbooks/daemon.json) --> keep remaining settings as-is --> Save
+	Click on Settings (cog-wheel icon in the top menu bar) --> Security --> Realms -> Add "Docker bearer token realm" to the Active list (right hand side panel) 
 	
 JENKINS : 
 	Open Jenkins with "http://<EXTERNAL IP OF OTHERS VM>:8080"
@@ -154,11 +156,11 @@ JENKINS :
 		- Credentials --> Add --> Add root credentials for OTHERS2 VM
 		- Host Key Verification Strategy : Non verifying....
 		- Save
-	Go to Manage Jenkins --> Configure system --> Go to "Artifactory" section --> Add artifactory server --> Provide following details :
-		Server Id
-		URL (url should be like http://34.70.150.87:8081/artifactory/)
-		Default deployer username 
-		Default deployer password
+	Go to Manage Jenkins --> Configure system --> Go to "Sonatype Nexus" section --> Add nexus repository manager server --> Provide following details :
+		Display name  :
+		Server ID : 
+		Server URL : "http://<EXTERNAL IP OF OTHERS2 VM>:8081"
+		Credentials : Add a new jenkins credential to reflect nexus admin credentials
 	--> Save
 
 	

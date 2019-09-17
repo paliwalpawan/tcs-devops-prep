@@ -1,5 +1,12 @@
 node('master') {
 	def mvnHome
+	def registryHost = "35.222.228.216"
+	def registryPort = "8081"
+	def registryDockerPort = "8083"
+	def registryUser = "admin"
+	def registryPassword = "admin"
+	def sonarHost = "34.70.150.87"
+	def sonarPort = "9000"
 	
 	stage('Checkout') { 
 		timestamps {
@@ -28,9 +35,9 @@ node('master') {
 	stage('Static Analysis') {
 		timestamps {
 			// Run maven command to perform static analysis & publish report in sonar server
-			withEnv(["MVN_HOME=$mvnHome"]) {
+			withEnv(["MVN_HOME=$mvnHome", "sonarHost=$sonarHost", "sonarPort=$sonarPort"]) {
 				if (isUnix()) {
-					jobStatus = sh(returnStatus: true, script: 'cd ${WORKSPACE}/SimpleServlet/ && "$MVN_HOME/bin/mvn" sonar:sonar -Dsonar.projectKey=tcs-devops-hackathon-prep-project -Dsonar.host.url=http://34.70.150.87:9000 -Dsonar.login=ec4b9a052afbc6884c94e9e754ad3dc7a27dfe2f')
+					jobStatus = sh(returnStatus: true, script: 'cd ${WORKSPACE}/SimpleServlet/ && "$MVN_HOME/bin/mvn" sonar:sonar -Dsonar.projectKey=tcs-devops-hackathon-prep-project -Dsonar.host.url="http://$sonarHost:$sonarPort" -Dsonar.login=ec4b9a052afbc6884c94e9e754ad3dc7a27dfe2f')
 					
 					if(jobStatus != 0) {
 						sh "exit 1"
@@ -41,27 +48,12 @@ node('master') {
 	}
 	*/
 	
-	stage('Upload Artifact') {
+	stage('Upload Build Artifact') {
 		timestamps{
 			// Upload war file to Nexus artifactory
 			try {
 				nexusPublisher nexusInstanceId: 'Nexus-Server', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: './SimpleServlet/target/SimpleServlet-1.war']], mavenCoordinate: [artifactId: 'SimpleServlet', groupId: 'net.javatutorial.tutorials', packaging: 'war', version: '${JOB_NAME}-${BUILD_NUMBER}']]]
 				
-				/*
-				// For uploading to jFrog artifactory
-				rtUpload (
-					serverId: "Artifactory-Server",
-					spec:
-						"""{
-						"files": [
-							{
-								"pattern": "${WORKSPACE}/SimpleServlet/target/*.war",
-								"target": "tcs-devops-hackathon-prep-project/${JOB_NAME}-${BUILD_NUMBER}/"
-							}
-						]
-						}"""
-				)*/
-
 			} catch(Exception ex) {
 				sh "exit 1"
 			}
@@ -69,46 +61,31 @@ node('master') {
 	}
 	
 
-	stage('Build Image') {
+	stage('Create and Push Image') {
 		timestamps {
 			try {
-				// Download war file from Nexus repository
-				withEnv(["MVN_HOME=$mvnHome"]) {
+				
+				withEnv(["MVN_HOME=$mvnHome", "registryHost=$registryHost", "registryPort=$registryPort", "registryDockerPort=$registryDockerPort", "registryUser=$registryUser", "registryPassword=$registryPassword"]) {
+
 					if (isUnix()) {
-						jobStatus = sh(returnStatus: true, script: '"$MVN_HOME/bin/mvn" dependency:get -DremoteRepositories=http://104.154.155.222:8081/repository/maven-releases/ -DgroupId=net.javatutorial.tutorials -DartifactId=SimpleServlet -Dversion=${JOB_NAME}-${BUILD_NUMBER} -Dpackaging=war -Ddest=${WORKSPACE}/docker/')
+						// Download war file from Nexus repository
+						jobStatus = sh(returnStatus: true, script: '"$MVN_HOME/bin/mvn" dependency:get -DremoteRepositories=http://"${registryHost}":"${registryPort}"/repository/maven-releases/ -DgroupId=net.javatutorial.tutorials -DartifactId=SimpleServlet -Dversion=${JOB_NAME}-${BUILD_NUMBER} -Dpackaging=war -Ddest=${WORKSPACE}/docker/')
 						
 						if(jobStatus != 0) {
 							sh "exit 1"
 						} 
+						
+						// Create & push Docker Image
+						loginStatus = sh(returnStatus: true, script: 'docker login "${registryHost}":"${registryDockerPort}" -u "${registryUser}" -p "${registryPassword}"')
+						if(loginStatus != 0) {
+							sh "Login to Docker Registry failed"
+							sh "exit 1"
+						}
+						def customImage =  docker.build("${registryHost}:${registryDockerPort}/simpleservlet:${JOB_NAME}-${BUILD_NUMBER}", "${WORKSPACE}/docker/")
+						customImage.push()
 					}
 				}
 
-				/*
-				// Download war file from artifactory
-				rtDownload (
-					serverId: "Artifactory-Server",
-					spec:
-						"""{
-						"files": [
-							{
-							"pattern": "tcs-devops-hackathon-prep-project/${JOB_NAME}-${BUILD_NUMBER}/",
-							"target": "${WORKSPACE}/docker/"
-							}
-						]
-						}"""
-				)  
-*/				
-
-				// Create Docker Image
-				if(isUnix()) {
-					withServer(registry: [credentialsId: 'dockerhubId']) {
-						    def customImage = docker.build("${dockerhubId}/simplilearn-project1:${env.BUILD_NUMBER}", "${WORKSPACE}/simplilearn-devops-project1/docker/")
-						    customImage.push();
-					}
-					// sh(script: "mv ${WORKSPACE}/docker/${JOB_NAME}-${BUILD_NUMBER}/SimpleServlet-*.war ${WORKSPACE}/docker/")
-					def customImage =  docker.build("simpleservlet:${JOB_NAME}-${BUILD_NUMBER}", "${WORKSPACE}/docker/")
-					// customImage.push()
-				}
 
 			} catch(Exception ex) {
 				sh "exit 1"
@@ -117,30 +94,8 @@ node('master') {
 	}
 	
 	/*
-	// Currently not working (for uploading image into jFrog artifactory)
-	// Useful examples : 
-	// - https://www.jfrog.com/confluence/display/RTF/Scripted+Pipeline+Syntax
-	// - https://github.com/jfrogtraining/kubernetes_example/tree/master/docker-app
-	// - https://www.jfrog.com/confluence/plugins/servlet/mobile?contentId=57477640#content/view/57477640
-	
-	stage('Upload Image') {
-		timestamps {
-			try {
-				// Upload docker image to jFrog artifactory
-				def server = Artifactory.server 'Artifactory-Server'
-				def rtDocker = Artifactory.docker server: server
-				def buildInfo = rtDocker.push('http://34.70.150.87:8081/simpleservlet:${BUILD_NUMBER}', 'tcs-devops-hackathon-prep-project/${JOB_NAME}-${BUILD_NUMBER}')
-				server.publishBuildInfo buildInfo
-			} catch(Exception ex) {
-				sh "exit 1"
-			}
-		}
-	}
-
-	
-	
 	stage('Deploy') {
 		// Deploy docker image to kubernetes cluster
 	}
-		*/
+	*/
 }
