@@ -35,4 +35,4 @@
   - role: bbaassssiiee.nexus
     become: yes
     vars:
-      nexus_name: "nexus-3.18.1-01"
+      nexus_version: "3.18.1-01"
