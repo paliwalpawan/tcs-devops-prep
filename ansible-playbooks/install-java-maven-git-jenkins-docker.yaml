@@ -52,6 +52,19 @@
 
 - hosts: others
   tasks:
+    - name: "add insecure nexus registry"
+      become: yes
+      copy:
+        src: daemon.json
+        dest: /etc/docker/daemon.json
+    - name: "restart docker"
+      become: yes
+      service:
+        name: docker
+        state: restarted 
+ 
+- hosts: others
+  tasks:
     - name: restart jenkins
       become: yes
       service:
