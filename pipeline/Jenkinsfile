@@ -3,6 +3,7 @@ node('master') {
 	
 	stage('Checkout') { 
 		timestamps {
+			cleanWs()
 			// Checkout source code repository
 			git 'https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project.git'
 			mvnHome = tool 'Local-Maven'
@@ -23,7 +24,7 @@ node('master') {
 			}
 		}
 	}
-	
+	/*
 	stage('Static Analysis') {
 		timestamps {
 			// Run maven command to perform static analysis & publish report in sonar server
@@ -38,12 +39,13 @@ node('master') {
 			}
 		}
 	}
+	*/
 	
 	stage('Upload Artifact') {
 		timestamps{
 			// Upload war file to Nexus artifactory
 			try {
-				nexusPublisher nexusInstanceId: 'Nexus-Server', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '${WORKSPACE}/SimpleServlet/target/*.war']], mavenCoordinate: [artifactId: 'SimpleServlet', groupId: 'net.javatutorial.tutorials', packaging: 'war', version: '${JOB_NAME}-${BUILD_NUMBER}']]]
+				nexusPublisher nexusInstanceId: 'Nexus-Server', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: './SimpleServlet/target/SimpleServlet-1.war']], mavenCoordinate: [artifactId: 'SimpleServlet', groupId: 'net.javatutorial.tutorials', packaging: 'war', version: '${JOB_NAME}-${BUILD_NUMBER}']]]
 				
 				/*
 				// For uploading to jFrog artifactory
@@ -66,10 +68,22 @@ node('master') {
 		}
 	}
 	
-	/*
+
 	stage('Build Image') {
 		timestamps {
 			try {
+				// Download war file from Nexus repository
+				withEnv(["MVN_HOME=$mvnHome"]) {
+					if (isUnix()) {
+						jobStatus = sh(returnStatus: true, script: '"$MVN_HOME/bin/mvn" dependency:get -DremoteRepositories=http://104.154.155.222:8081/repository/maven-releases/ -DgroupId=net.javatutorial.tutorials -DartifactId=SimpleServlet -Dversion=${JOB_NAME}-${BUILD_NUMBER} -Dpackaging=war -Ddest=${WORKSPACE}/docker/')
+						
+						if(jobStatus != 0) {
+							sh "exit 1"
+						} 
+					}
+				}
+
+				/*
 				// Download war file from artifactory
 				rtDownload (
 					serverId: "Artifactory-Server",
@@ -82,12 +96,18 @@ node('master') {
 							}
 						]
 						}"""
-				)       
+				)  
+*/				
 
 				// Create Docker Image
 				if(isUnix()) {
-					sh(script: "mv ${WORKSPACE}/docker/${JOB_NAME}-${BUILD_NUMBER}/SimpleServlet-*.war ${WORKSPACE}/docker/")
-					docker.build("simpleservlet:${BUILD_NUMBER}", "${WORKSPACE}/docker/")
+					withServer(registry: [credentialsId: 'dockerhubId']) {
+						    def customImage = docker.build("${dockerhubId}/simplilearn-project1:${env.BUILD_NUMBER}", "${WORKSPACE}/simplilearn-devops-project1/docker/")
+						    customImage.push();
+					}
+					// sh(script: "mv ${WORKSPACE}/docker/${JOB_NAME}-${BUILD_NUMBER}/SimpleServlet-*.war ${WORKSPACE}/docker/")
+					def customImage =  docker.build("simpleservlet:${JOB_NAME}-${BUILD_NUMBER}", "${WORKSPACE}/docker/")
+					// customImage.push()
 				}
 
 			} catch(Exception ex) {
@@ -96,6 +116,7 @@ node('master') {
 		}
 	}
 	
+	/*
 	// Currently not working (for uploading image into jFrog artifactory)
 	// Useful examples : 
 	// - https://www.jfrog.com/confluence/display/RTF/Scripted+Pipeline+Syntax
@@ -115,11 +136,11 @@ node('master') {
 			}
 		}
 	}
-	*/
+
 	
 	
 	stage('Deploy') {
 		// Deploy docker image to kubernetes cluster
 	}
-	
+		*/
 }
