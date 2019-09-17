@@ -34,3 +34,5 @@
   roles:
   - role: bbaassssiiee.nexus
     become: yes
+    vars:
+      nexus_name: "nexus-{{ 3.18.1-01 }}"

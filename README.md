@@ -137,7 +137,7 @@ JENKINS :
 		- Add configurations for JDK, Maven , Git & Docker
 	Go to Manage Jenkins --> Manage Plugins --> Available tab --> Install following (Install without restart)
 		- Blue Ocean (for nice visualization of pipeline stages)
-		- Artifactory (for uploading / downloading files to/from jFrog artifactory)
+		- Nexus Platform (for uploading / downloading files to/from Nexus artifactory)
 	Go to Manage Jenkins --> Manage Nodes --> New Node
 		- Prerequisite : The slave node(s) must have password login enabled (IMPORTANT !!!)
 			> Login to all the target slave nodes
