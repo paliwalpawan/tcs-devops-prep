@@ -119,6 +119,25 @@ Installation of Java, Sonarqube, Nexus artifactory in <OTHERS2> using ansible
 <h5>3) Preparation work </h5>
 
 ```
+
+KUBENETES CLUSTER & JENKINS HOST:
+	In Google Kubernetes cluster :
+		Get config details by :
+			cat ~/.kube/config
+		Copy the entire content
+
+	In Jenkins Server : (as jenkins user)
+		Download the latest release with the command:
+			curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+		Make the kubectl binary executable.
+			chmod +x ./kubectl
+		Move the binary in to your PATH.
+			sudo mv ./kubectl /usr/local/bin/kubectl
+		Copy the content of kubernetes config 
+			mkdir -p ~/.kube/
+			vim ~/.kube/config (and paste the content copied from kubenetes cluster)
+		Test the connection 
+			kubectl get ns --insecure-skip-tls-verify=true
 		
 SONARQUBE:
 	Open sonarqube in browser with "http://<EXTERNAL IP OF OTHERS2 VM>:9000"

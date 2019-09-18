@@ -40,6 +40,24 @@
         name: jenkins
         enabled: yes
         state: started
+       
+- hosts: others
+  tasks:
+    - name : "download kubectl"
+      become: yes
+      command: "curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl"
+    - name : "change permission of kubectl file"
+      become: yes
+      command: "chmod +x kubectl"
+    - name : "move kubectl to /usr/bin"
+      become: yes
+      command: "move kubectl /usr/bin"
+    - name : "create /home/jenkins/.kube directory"
+      become: yes
+      file:
+        path: /home/jenkins/.kube/
+        state: directory    
+
       
 - hosts: others
   roles:

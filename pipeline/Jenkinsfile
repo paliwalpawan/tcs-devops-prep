@@ -1,6 +1,6 @@
 node('master') {
 	def mvnHome
-	def registryHost = "35.222.228.216"
+	def registryHost = "34.69.43.242"
 	def registryPort = "8081"
 	def registryDockerPort = "8083"
 	def registryUser = "admin"
