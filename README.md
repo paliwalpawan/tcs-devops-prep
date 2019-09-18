@@ -120,13 +120,14 @@ Installation of Java, Sonarqube, Nexus artifactory in <OTHERS2> using ansible
 
 ```
 
-KUBENETES CLUSTER & JENKINS HOST:
+KUBERNETES CLUSTER & JENKINS HOST:
 	In Google Kubernetes cluster :
-		Delete any existing configurations
-			rm -f ~/.kube/config
-		Generate cluster config 
-			gcloud container clusters get-credentials <cluster name> --region=<cluster location>
-			details are available in Kubernetes cluster page
+		?Delete any existing configurations
+		?	rm -f ~/.kube/config
+		?Generate cluster config 
+		?	gcloud container clusters get-credentials <cluster name> --region=<cluster location>
+		?	details are available in Kubernetes cluster page
+			kubectl config set-credentials cluster-admin --username=admin --password=admin
 		Get the config
 			kubectl config view
 			copy the content
