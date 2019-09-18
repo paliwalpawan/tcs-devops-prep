@@ -28,7 +28,7 @@
         dest: /etc/yum.repos.d/jenkins.repo
     - name : "add jenkins repository"
       become: yes
-      command: "rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key"
+      shell: "rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key"
     - name : "install jenkins"
       become: yes
       yum:
@@ -45,13 +45,15 @@
   tasks:
     - name : "download kubectl"
       become: yes
-      command: "curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl"
+      shell: curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
     - name : "change permission of kubectl file"
       become: yes
-      command: "chmod +x kubectl"
+      file: 
+        path: ./kubectl
+        mode: +x
     - name : "move kubectl to /usr/bin"
       become: yes
-      command: "move kubectl /usr/bin"
+      shell: mv kubectl /usr/bin
     - name : "create /home/jenkins/.kube directory"
       become: yes
       file:
