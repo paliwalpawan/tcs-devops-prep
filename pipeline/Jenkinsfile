@@ -99,7 +99,7 @@ node('master') {
 				// Deploy docker image to kubernetes cluster
 				sh "sed 's/IMAGE_VERSION/${JOB_NAME}-${BUILD_NUMBER}/g' ${WORKSPACE}/docker/simpleservlet-deployment.yaml > ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml"
 				sh "mv ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml ${WORKSPACE}/docker/simpleservlet-deployment.yaml"
-				sh "kubectl apply -f ${WORKSPACE}/docker/simpleservlet-deployment.yaml --insecure-skip-tls-verify=true"
+				sh "cd ${WORKSPACE}/docker/ && kubectl apply -f ./simpleservlet-deployment.yaml --insecure-skip-tls-verify=true"
 			} catch(Exception ex) {
 				sh "exit 1"
 			}
