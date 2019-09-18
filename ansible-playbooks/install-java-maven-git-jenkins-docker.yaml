@@ -54,11 +54,13 @@
     - name : "move kubectl to /usr/bin"
       become: yes
       shell: mv kubectl /usr/bin
-    - name : "create /home/jenkins/.kube directory"
+    - name : "create .kube directory in jenkins user home directory"
       become: yes
       file:
-        path: /home/jenkins/.kube/
-        state: directory    
+        path: /var/lib/jenkins/.kube/
+        state: directory  
+        owner: jenkins 
+        group: jenkins        
 
       
 - hosts: others

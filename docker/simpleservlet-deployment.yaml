@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: to-do-list
-        image: simpleservlet:BUILD_NUMBER
+        image: simpleservlet:IMAGE_VERSION
         ports:
         - containerPort: 80
 ---

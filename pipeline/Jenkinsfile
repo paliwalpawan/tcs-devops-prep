@@ -93,9 +93,16 @@ node('master') {
 		}
 	}
 	
-	/*
 	stage('Deploy') {
-		// Deploy docker image to kubernetes cluster
+		timestamps {
+			try {
+				// Deploy docker image to kubernetes cluster
+				sh "sed 's/IMAGE_VERSION/${JOB_NAME}-${BUILD_NUMBER}/g' ${WORKSPACE}/docker/simpleservlet-deployment.yaml"
+				sh "kubectl apply -f ${WORKSPACE}/docker/simpleservlet-deployment.yaml --insecure-skip-tls-verify=true"
+			} catch(Exception ex) {
+				sh "exit 1"
+			}
+		}
 	}
-	*/
+
 }
