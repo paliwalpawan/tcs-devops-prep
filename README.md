@@ -9,7 +9,7 @@ VM instance creation
 	- Created exactly similar instance for all other tools named <OTHERS> & <OTHERS2>
 	
 Kubernetes cluster creation 
-	- Created a kubernetes cluster with 1 nodes & 1 CPU
+	- Created a kubernetes cluster with 3 nodes
 
 
 Creation of ssh keys in <ANSIBLE> instance 
