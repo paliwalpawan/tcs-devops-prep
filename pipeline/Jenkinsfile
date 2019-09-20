@@ -105,7 +105,7 @@ node('master') {
 					sh "sed 's/IMAGE_VERSION/${JOB_NAME}-${BUILD_NUMBER}/g' ${WORKSPACE}/docker/simpleservlet-deployment.yaml > ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml"
 					sh "mv ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml ${WORKSPACE}/docker/simpleservlet-deployment.yaml"
 					
-					step([$class: 'KubernetesEngineBuilder',namespace: $kubernetesNamespace , projectId: $gkeProjectId, clusterName: $gkeClusterName, zone: $gkeProjectZone , manifestPattern: 'docker/simpleservlet-deployment.yaml', credentialsId: $gkeProjectId, verifyDeployments: false])
+					step([$class: 'KubernetesEngineBuilder',namespace: "$kubernetesNamespace" , projectId: "$gkeProjectId" , clusterName: "$gkeClusterName" , zone: "$gkeProjectZone" , manifestPattern: 'docker/simpleservlet-deployment.yaml', credentialsId: "$gkeProjectId" , verifyDeployments: false])
 				}
 			} catch(Exception ex) {
 				sh "exit 1"
