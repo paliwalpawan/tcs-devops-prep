@@ -34,7 +34,7 @@ Allowing root login in <ANSIBLE>, <OTHERS> & <OTHERS2> instance from <ANSIBLE> i
 	- repeat the same steps for <ANSIBLE> & <OTHERS2> instance as well
 
 Verification of passwordless ssh from <ANSIBLE> -> <OTHERS>
-	- Now, in <ANSIBLE> instance command prompt, try "ssh root@<public or private IP of OTHERS>" and verify that passwordless ssh is indeed happening
+	- Now, in <ANSIBLE> instance command prompt, try "ssh root@public or private IP of OTHERS>" and verify that passwordless ssh is indeed happening
 	- Thus <ANSIBLE> -> <OTHERS> passwordless ssh is established
 	- Since the configuratio is same, <ANSIBLE> -> <OTHERS2> should also work
 	- The exact same process can be followed if we need to enable <OTHERS> -> <ANSIBLE> passwordless ssh
