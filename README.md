@@ -1,7 +1,12 @@
 <h4>Following steps describe the end-to-end process for completing TCS DevOps Golden Bridge Hackathon (2019) challenge</h4>
 <h6>Note : For simplicity we used only three GCP VM instances</h6>
 
-<h5>1) Software Provisioning Stage</h5>
+<h4>Index</h4>
+- <a href="#software-provisioning-stage">1) Software Provisioning Stage</a>
+- <a href="#jenkins-pipeline">2) Jenkins Pipeline</a>
+- <a href="#required-configurations">3) Required Configurations</a>
+
+<h5 id="software-provisioning-stage">1) Software Provisioning Stage</h5>
 
 ```
 VM instance creation 
@@ -112,31 +117,13 @@ Installation of Java, Sonarqube, Nexus artifactory in <OTHERS2> using ansible
 	- And, access nexus from browser : "http://<EXTERNAL IP OF OTHERS2 VM>:8081" (Look out for initial password in the login screen & then set new admin password credentials admin / admin)
 ```
 
-<h5>2) Jenkins Pipeline</h5>
+<h5 id="jenkins-pipeline">2) Jenkins Pipeline</h5>
 
 ![Jenkins Pipeline](https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project/raw/master/images/Jenkins-Pipeline.JPG)
 
-<h5>3) Preparation work </h5>
+<h5 id="required-configurations">3) Required Configurations </h5>
 
 ```
-https://github.com/jenkinsci/google-kubernetes-engine-plugin/blob/master/docs/Home.md
-KUBERNETES CLUSTER & JENKINS HOST:
-	In Google Kubernetes cluster :
-		?Delete any existing configurations
-		?	rm -f ~/.kube/config
-		?Generate cluster config 
-		?	gcloud container clusters get-credentials <cluster name> --region=<cluster location>
-		?	details are available in Kubernetes cluster page
-			kubectl config set-credentials cluster-admin --username=admin --password=admin
-		Get the config
-			kubectl config view
-			copy the content
-
-	In Jenkins Server : (as jenkins user)
-		Paste the content of kubernetes config 
-			vim ~/.kube/config (and paste the content copied from kubenetes cluster)
-		Test the connection 
-			kubectl get ns --insecure-skip-tls-verify=true
 		
 SONARQUBE:
 	Open sonarqube in browser with "http://<EXTERNAL IP OF OTHERS2 VM>:9000"
@@ -158,7 +145,7 @@ JENKINS :
 	Go to Manage Jenkins --> Manage Plugins --> Available tab --> Install following (Install without restart)
 		- Blue Ocean (for nice visualization of pipeline stages)
 		- Nexus Platform (for uploading / downloading files to/from Nexus artifactory)
-		- Google kubernetes engine ??
+		- Google kubernetes engine 
 	Go to Manage Jenkins --> Manage Nodes --> New Node
 		- Prerequisite : The slave node(s) must have password login enabled (IMPORTANT !!!)
 			> Login to all the target slave nodes
@@ -181,8 +168,17 @@ JENKINS :
 		Server URL : "http://<EXTERNAL IP OF OTHERS2 VM>:8081"
 		Credentials : Add a new jenkins credential to reflect nexus admin credentials
 	--> Save
-
-	
-	
-..........
+	PERFORM THE STEPS WRITTEN IN THIS URL : https://github.com/jenkinsci/google-kubernetes-engine-plugin/blob/master/docs/Home.md (IMPORTANT !!!!). Follow ONLY below mentioned sections from this page :
+		- Enable Required APIs
+		- IAM Credentials
+		- Configure GKE Cluster Step 2 (Step 1 will be performed from GKE UI)
+		- Configure Kubernetes Cluster Permissions (Follow Less Restrictive Permissions section. Skip More Restrictive Permissions , Automation Option & References sections),
+		- Ignore rest of the steps of the page
+	Before creating the Jenkins Pipeline
+		- Visit the source code repository & update URLs, project name , credentials etc in all the files , especially Jenkinsfile
+	Go to Jenkins dashboard --> New Item -> Enter name of the pipeline Job --> Select Pipeline --> Ok --> In the [Pipeline] section, select following values :
+		- Definition: pipeline script from SCM
+		- SCM: Git
+		- Add repository details
+		- Save
 ```
