@@ -1,4 +1,5 @@
 node('master') {
+	def gitUrl = "https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project.git"
 	def mvnHome
 	def registryHost = "34.68.23.79"
 	def registryPort = "8081"
@@ -15,9 +16,11 @@ node('master') {
 	stage('Checkout') { 
 		timestamps {
 			cleanWs()
-			// Checkout source code repository
-			git 'https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project.git'
-			mvnHome = tool 'Local-Maven'
+			withEnv(["gitUrl=$gitUrl"]) {
+				// Checkout source code repository
+				git "$gitUrl"
+				mvnHome = tool 'Local-Maven'
+			}
 		}
 	}
 	
