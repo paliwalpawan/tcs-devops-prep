@@ -119,7 +119,7 @@ Installation of Java, Sonarqube, Nexus artifactory in <OTHERS2> using ansible
 <h5>3) Preparation work </h5>
 
 ```
-
+https://github.com/jenkinsci/google-kubernetes-engine-plugin/blob/master/docs/Home.md
 KUBERNETES CLUSTER & JENKINS HOST:
 	In Google Kubernetes cluster :
 		?Delete any existing configurations
@@ -158,6 +158,7 @@ JENKINS :
 	Go to Manage Jenkins --> Manage Plugins --> Available tab --> Install following (Install without restart)
 		- Blue Ocean (for nice visualization of pipeline stages)
 		- Nexus Platform (for uploading / downloading files to/from Nexus artifactory)
+		- Google kubernetes engine ??
 	Go to Manage Jenkins --> Manage Nodes --> New Node
 		- Prerequisite : The slave node(s) must have password login enabled (IMPORTANT !!!)
 			> Login to all the target slave nodes
