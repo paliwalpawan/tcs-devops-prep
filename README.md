@@ -2,9 +2,9 @@
 <h6>Note : For simplicity we used only three GCP VM instances</h6>
 
 <h4>Index</h4>
-- <a href="#software-provisioning-stage">1) Software Provisioning Stage</a>
-- <a href="#jenkins-pipeline">2) Jenkins Pipeline</a>
-- <a href="#required-configurations">3) Required Configurations</a>
+1. <a href="#software-provisioning-stage">1) Software Provisioning Stage</a>
+2. <a href="#jenkins-pipeline">2) Jenkins Pipeline</a>
+3. <a href="#required-configurations">3) Required Configurations</a>
 
 <h5 id="software-provisioning-stage">1) Software Provisioning Stage</h5>
 
