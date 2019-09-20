@@ -100,13 +100,13 @@ node('master') {
 	stage('Deploy') {
 		timestamps {
 			try {
-				withEnv(["kubernetesNamespace=$kubernetesNamespace", "gkeProjectId=$gkeProjectId", "gkeClusterName=$gkeClusterName", "gkeProjectZone=$gkeProjectZone" ])
-				// Deploy docker image to kubernetes cluster
-				sh "sed 's/IMAGE_VERSION/${JOB_NAME}-${BUILD_NUMBER}/g' ${WORKSPACE}/docker/simpleservlet-deployment.yaml > ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml"
-				sh "mv ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml ${WORKSPACE}/docker/simpleservlet-deployment.yaml"
-				
-				step([$class: 'KubernetesEngineBuilder',namespace: $kubernetesNamespace , projectId: $gkeProjectId, clusterName: $gkeClusterName, zone: $gkeProjectZone , manifestPattern: 'docker/simpleservlet-deployment.yaml', credentialsId: $gkeProjectId, verifyDeployments: false])
-				
+				withEnv(["kubernetesNamespace=$kubernetesNamespace", "gkeProjectId=$gkeProjectId", "gkeClusterName=$gkeClusterName", "gkeProjectZone=$gkeProjectZone" ]) {
+					// Deploy docker image to kubernetes cluster
+					sh "sed 's/IMAGE_VERSION/${JOB_NAME}-${BUILD_NUMBER}/g' ${WORKSPACE}/docker/simpleservlet-deployment.yaml > ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml"
+					sh "mv ${WORKSPACE}/docker/simpleservlet-deployment-copy.yaml ${WORKSPACE}/docker/simpleservlet-deployment.yaml"
+					
+					step([$class: 'KubernetesEngineBuilder',namespace: $kubernetesNamespace , projectId: $gkeProjectId, clusterName: $gkeClusterName, zone: $gkeProjectZone , manifestPattern: 'docker/simpleservlet-deployment.yaml', credentialsId: $gkeProjectId, verifyDeployments: false])
+				}
 			} catch(Exception ex) {
 				sh "exit 1"
 			}
