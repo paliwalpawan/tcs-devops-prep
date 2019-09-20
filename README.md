@@ -1,6 +1,7 @@
 <h4>Following steps describe the end-to-end process for completing TCS DevOps Golden Bridge Hackathon (2019) challenge</h4>
 <h6>Note : For simplicity we used only three GCP VM instances</h6>
 
+
 <h4>Index</h4>
 - <a href="#software-provisioning-stage">1) Software Provisioning Stage</a><br/>
 - <a href="#jenkins-pipeline">2) Jenkins Pipeline</a><br/>
