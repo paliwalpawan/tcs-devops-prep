@@ -1,12 +1,12 @@
 node('master') {
-	def gitUrl = "https://github.com/ArghyaChakraborty/tcs-devops-hackathon-prep-project.git"
+	def gitUrl = "https://github.com/burderahul/DevOpsHackathon.git"
 	def mvnHome
-	def registryHost = "34.68.23.79"
+	def registryHost = "34.66.179.28"
 	def registryPort = "8081"
 	def registryDockerPort = "8083"
 	def registryUser = "admin"
 	def registryPassword = "admin"
-	def sonarHost = "34.70.150.87"
+	def sonarHost = "104.198.182.112"
 	def sonarPort = "9000"
 	def kubernetesNamespace= "default"
 	def gkeProjectId = "calcium-storm-252622"
